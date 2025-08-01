@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.clecio.orderhub.dto.upskill.UpskillWebhookDTO;
+import com.clecio.orderhub.service.OrderService;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -21,13 +24,13 @@ public class WebhookController {
 
     private final OrderService orderService;
 
-    @Value("${abacate.webhook.secret:default-secret}")
+    @Value("${upskill.webhook.secret:default-secret}")
     private String webhookSecret;
 
-    @Value("${abacate.webhook.signature.enabled:false}")
+    @Value("${upskill.webhook.signature.enabled:false}")
     private boolean signatureValidationEnabled;
 
-    @PostMapping("/abacate")
+    @PostMapping("/upskill")
     public ResponseEntity<String> handleAbacateWebhook(
             @RequestBody UpskillWebhookDTO webhook,
             @RequestHeader(value = "X-Abacate-Signature", required = false) String signature) {

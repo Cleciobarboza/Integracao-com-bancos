@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.clecio.orderhub.dto.OrderStatusDTO;
+import com.clecio.orderhub.service.OrderService;
+
 import java.util.List;
 import java.util.Optional;
 

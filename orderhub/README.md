@@ -1,16 +1,16 @@
 # OrderHub - Sistema de Gerenciamento de Pedidos
 
-OrderHub é um sistema completo de gerenciamento de pedidos desenvolvido com Spring Boot, integrando pagamentos via Abacate Pay, processamento assíncrono com Kafka e APIs reativas com WebFlux.
+OrderHub é um sistema completo de gerenciamento de pedidos desenvolvido com Spring Boot, integrando pagamentos via Upskill Pay, processamento assíncrono com Kafka e APIs reativas com WebFlux.
 
 ## 🚀 Funcionalidades
 
 ### Core Features
 - ✅ **Criação de Pedidos**: API REST para criação de pedidos com validação
-- ✅ **Integração de Pagamentos**: Integração com Abacate Pay via Feign Client
+- ✅ **Integração de Pagamentos**: Integração com Upskill Pay via Feign Client
 - ✅ **Processamento Assíncrono**: Eventos Kafka para comunicação entre serviços
 - ✅ **APIs Reativas**: Endpoints WebFlux para consultas em tempo real
 - ✅ **Painel Administrativo**: Endpoints para gerenciamento e relatórios
-- ✅ **Webhooks**: Processamento de webhooks do Abacate Pay
+- ✅ **Webhooks**: Processamento de webhooks do Upiskill Pay
 
 ### Recursos Técnicos
 - 🔄 **Event-Driven Architecture**: Kafka para eventos de pedidos, pagamentos, estoque e faturas

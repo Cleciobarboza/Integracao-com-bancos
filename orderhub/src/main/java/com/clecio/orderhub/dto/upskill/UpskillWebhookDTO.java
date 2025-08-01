@@ -1,5 +1,14 @@
 package com.clecio.orderhub.dto.upskill;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpskillWebhookDTO {
 
 
@@ -35,6 +44,12 @@ public class UpskillWebhookDTO {
             private String frequency;
             private UpskillCustomerDTO customer;
         }
+  
+}
+
+    public Object getEnent() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getEnent'");
     }
 }
 

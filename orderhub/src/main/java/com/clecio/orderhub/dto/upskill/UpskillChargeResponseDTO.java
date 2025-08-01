@@ -1,5 +1,15 @@
 package com.clecio.orderhub.dto.upskill;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.clecio.orderhub.dto.upskill.UpskillCustomerResponseDTO.UpskillCustomerMetadataDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 public class UpskillChargeResponseDTO {
 
     private String error;
@@ -27,7 +37,7 @@ public class UpskillChargeResponseDTO {
         @JsonProperty("updatedAt")
         private LocalDateTime updatedAt;
         private List<UpskillProductResponseDTO> products;
-        private UpskillChargeMetadataDTO metadata;
+        private UpskillCustomerMetadataDTO metadata;
         private UpskillCustomerResponseDTO.UpskillCustomerMetadataDTO customer;
 
         @Data

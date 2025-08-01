@@ -1,6 +1,12 @@
 package com.clecio.orderhub.client;
 
 import com.clecio.orderhub.config.UpskillPayFeignConfig;
+import com.clecio.orderhub.dto.upskill.UpskillChargeRequestDTO;
+import com.clecio.orderhub.dto.upskill.UpskillChargeResponseDTO;
+import com.clecio.orderhub.dto.upskill.UpskillChargeResponseDTO.UpskillChargeDataDTO.AbacateChargeMetadataDTO;
+import com.clecio.orderhub.dto.upskill.UpskillCustomerDTO;
+import com.clecio.orderhub.dto.upskill.UpskillCustomerResponseDTO;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface UpskilldevClient {
     @PostMapping("/v1/customer/create")
-    UpskillCustomerResponseDTO createCustomer(@RequestBody UpuskillCustomerDTO customer);
+    UpskillCustomerResponseDTO createCustomer(@RequestBody UpskillCustomerDTO customer);
 
     @GetMapping("/v1/customers/{id}")
     UpskillCustomerResponseDTO getCustomer(@PathVariable("id") String customerId);
 
     @PostMapping("/v1/billing/create")
-    UpskillChargeResponseDTO createBilling(@RequestBody AbacateChargeRequestDTO billingRequest);
+    UpskillChargeResponseDTO createBilling(@RequestBody AbacateChargeMetadataDTO billingRequest);
+
+    UpskillCustomerResponseDTO createBilling(UpskillChargeRequestDTO billingRequest);
 }
 

@@ -1,0 +1,96 @@
+# Mock Profile Configuration
+# Everything disabled, only mocks, H2 database
+spring:
+  application:
+    name: orderhub
+
+  # H2 Database Configuration
+  datasource:
+    url: jdbc:h2:mem:orderhub_mock
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Kafka Configuration - DISABLED
+  kafka:
+    enabled: false
+
+  # Disable Kafka Auto Configuration
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+
+  # WebFlux Configuration
+  webflux:
+    base-path: /
+
+# Server Configuration
+server:
+  port: 8080
+
+# Management/Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Feign Client Configuration
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 10000
+        logger-level: basic
+
+# Abacate Pay Configuration - MOCK ENABLED
+abacate:
+  api:
+    base-url: https://api.upskillpay.com
+    token: mock-token
+    mock-enabled: true
+  webhook:
+    secret: mock-secret
+    signature:
+      enabled: false
+
+# Admin Configuration
+admin:
+  username: admin
+  password: admin123
+
+# Logging Configuration
+logging:
+  level:
+    com.clecio.orderhub: DEBUG
+    org.springframework.kafka: WARN
+    org.springframework.web: INFO
+    feign: DEBUG
+    root: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Application Configuration
+app:
+  base-url: http://localhost:8080
+  order:
+    status-url-template: "${app.base-url}/public/orders/{orderId}/status"

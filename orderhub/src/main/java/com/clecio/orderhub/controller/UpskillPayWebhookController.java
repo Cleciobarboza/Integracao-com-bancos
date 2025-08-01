@@ -1,15 +1,29 @@
 package com.clecio.orderhub.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.clecio.orderhub.dto.upskill.UpskillWebhookDTO;
+import com.clecio.orderhub.service.UpskillPayService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/webhooks/upskillpay")
 @RequiredArgsConstructor
 @Slf4j
 public class UpskillPayWebhookController {
-    private final UpskillPayService abacatePayService;
+    private final UpskillPayService upskillPayService;
 
     @Value("${upskill.webhook.secret:}")
     private String webhookSecret;
@@ -25,7 +39,7 @@ public class UpskillPayWebhookController {
 
         try {
             log.info("Webhook recebido do Upskillpay: event={}, devMode={}",
-                    webhook.getEvent(), webhook.getDevMode());
+                    webhook.getEnent(), webhook.getDevMode());
 
             // Validar assinatura se habilitado
             if (signatureValidationEnabled && !validateSignature(rawBody, signature)) {

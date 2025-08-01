@@ -1,16 +1,28 @@
 package com.clecio.orderhub.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.Map;
+
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.Map;
+import com.clecio.orderhub.dto.OrderResponseDTO;
+import com.clecio.orderhub.entity.OrderStatus;
+import com.clecio.orderhub.service.OrderService;
+import com.clecio.orderhub.specification.OrderSpecification;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/admin/orders")
@@ -21,23 +33,22 @@ public class AdminOrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(
+       public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(
             @RequestParam(required = false) OrderStatus status,
             @RequestParam(required = false) String customerEmail,
             @RequestParam(required = false) String customerName,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @PageableDefault(size = 20) Pageable pageable) {
-
-        log.info("Consulta administrativa de pedidos - status: {}, email: {}, nome: {}, período: {} a {}",
-                status, customerEmail, customerName, startDate, endDate);
-
+  log.info("Consulta administrativa de pedidos - status: {}, email: {}, nome: {}, período: {} a {}", 
+            status, customerEmail, customerName, startDate, endDate);
+        
         var specification = OrderSpecification.withFilters(status, customerEmail, startDate, endDate);
-
+        
         if (customerName != null && !customerName.trim().isEmpty()) {
             specification = specification.and(OrderSpecification.byCustomerName(customerName));
         }
-
+        
         Page<OrderResponseDTO> orders = orderService.filterOrders(specification, pageable);
 
         log.info("Retornando {} pedidos de {} total", orders.getNumberOfElements(), orders.getTotalElements());
