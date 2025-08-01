@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.clecio.orderhub.client.UpskilldevClient;
 import com.clecio.orderhub.dto.upskill.UpskillChargeRequestDTO;
@@ -39,15 +38,21 @@ public class UpskillPayService {
     public String createPayment(Order order) {
         try {
             UpskillCustomerResponseDTO.UpskillCustomerMetadataDTO upskillCustomer = getOrCreateAbacateCustomer(order);
+
             UpskillChargeRequestDTO billingRequest = getAbacateChargeRequestDTO(order, upskillCustomer);
 
-            UpskillChargeResponseDTO.UpskillChargeDataDTO billingResponse = mockEnabled
-                ? createMockBilling(billingRequest)
-                : upskillPayClient.createBilling(billingRequest).getData();
+            UpskillChargeResponseDTO.UpskillChargeDataDTO billingResponse;
 
-            log.info("Billing {} criado para pedido {}: {}", mockEnabled ? "mockado" : "real", order.getId(), billingResponse.getId());
+            if (mockEnabled) {
+                billingResponse = createMockBilling(billingRequest);
+                log.info("Billing mockado criado para pedido {}: {}", order.getId(), billingResponse.getId());
+            } else {
+                billingResponse = upskillPayClient.createBilling(billingRequest).getData();
+                log.info("Billing real criado para pedido {}: {}", order.getId(), billingResponse.getId());
+            }
 
             order.setUpskillTransactionId(billingResponse.getId());
+
             return billingResponse.getId();
 
         } catch (Exception e) {
@@ -55,7 +60,6 @@ public class UpskillPayService {
             throw new RuntimeException("Falha na integração com gateway de pagamento", e);
         }
     }
-
     private UpskillChargeRequestDTO getAbacateChargeRequestDTO(Order order, UpskillCustomerResponseDTO.UpskillCustomerMetadataDTO upskillCustomer) {
         UpskillChargeRequestDTO billingRequest = new UpskillChargeRequestDTO();
         billingRequest.setFrequency("ONE_TIME");
@@ -66,6 +70,7 @@ public class UpskillPayService {
         product.setName("Pedido #" + order.getId());
         product.setQuantity(1);
         product.setDescription("Pagamento do pedido #" + order.getId());
+
         product.setPrice(order.getTotalAmount().multiply(BigDecimal.valueOf(100)).intValue());
 
         billingRequest.setProducts(Collections.singletonList(product));
@@ -132,7 +137,22 @@ public class UpskillPayService {
         return response;
     }
 
-    @Transactional
+    // public UpskillResponseDTO getBilling(String billingId) {
+    //     if (mockEnabled) {
+    //         UpskillChargeResponseDTO mockResponse = new UpskillChargeResponseDTO();
+    //         UpskillChargeResponseDTO.UpskillChargeDataDTO mockData = new UpskillChargeResponseDTO.UpskillChargeDataDTO();
+    //         mockData.setId(billingId);
+    //         mockData.setStatus("PENDING");
+    //         mockData.setFrequency("ONE_TIME");
+    //         mockData.setMethods(Arrays.asList("PIX"));
+    //         mockData.setCreatedAt(LocalDateTime.now());
+    //         return mockResponse;
+    //     } else {
+    //         UpskillChargeResponseDTO getResponse = upskillPayClient.getBilling(billingId);
+    //         return getResponse;
+    //     }
+    // }
+
     public void processWebhook(String billingId, String event, String status) {
         try {
             log.info("Processando webhook do Upskillpay - Billing: {}, Event: {}, Status: {}",
@@ -144,7 +164,7 @@ public class UpskillPayService {
                 Order order = orderOpt.get();
                 OrderStatus newStatus = mapUpskillStatusToOrderStatus(status, event);
 
-                if (newStatus != null && !newStatus.equals(order.getStatus())) {
+                if (!newStatus.equals(order.getStatus())) {
                     order.setStatus(newStatus);
                     if (newStatus == OrderStatus.PAID) {
                         order.setPaidAt(LocalDateTime.now());
@@ -172,3 +192,4 @@ public class UpskillPayService {
         return null;
     }
 }
+

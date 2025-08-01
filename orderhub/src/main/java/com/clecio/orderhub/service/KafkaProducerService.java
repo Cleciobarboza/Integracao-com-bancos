@@ -60,7 +60,7 @@ public class KafkaProducerService {
             event.setOrderId(order.getId());
             event.setCustomerEmail(order.getCustomer().getEmail());
             event.setAmount(order.getTotalAmount());
-            event.setAbacateTransactionId(order.getAbacateTransactionId());
+            event.setUpskillTransactionId(order.getUpskillTransactionId());
             event.setPaymentMethod(order.getPaymentMethod());
             event.setPaidAt(order.getPaidAt());
 

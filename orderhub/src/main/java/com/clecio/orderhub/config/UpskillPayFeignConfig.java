@@ -3,10 +3,10 @@ package com.clecio.orderhub.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration

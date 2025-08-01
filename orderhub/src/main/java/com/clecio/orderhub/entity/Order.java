@@ -39,7 +39,7 @@ public class Order {
     private String paymentMethod;
 
     @Column(name = "upskill_transaction_id")
-    private String abacateTransactionId;
+    private String upskillTransactionId;
 
     @Column(name = "payment_link")
     private String paymentLink;
@@ -71,10 +71,5 @@ public class Order {
         if (status == OrderStatus.PAID && paidAt == null) {
             paidAt = LocalDateTime.now();
         }
-    }
-
-    public void setUpskillTransactionId(String id2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setUpskillTransactionId'");
     }
 }

@@ -16,7 +16,7 @@ public class PaymentConfirmedEvent {
     private Long orderId;
     private String customerEmail;
     private BigDecimal amount;
-    private String abacateTransactionId;
+    private String UpskillTransactionId;
     private String paymentMethod;
     private LocalDateTime paidAt;
 }

@@ -1,6 +1,8 @@
 package com.clecio.orderhub.mapper;
 
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -13,8 +15,6 @@ import com.clecio.orderhub.dto.OrderStatusDTO;
 import com.clecio.orderhub.entity.Customer;
 import com.clecio.orderhub.entity.Order;
 import com.clecio.orderhub.entity.OrderItem;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -36,7 +36,7 @@ public interface OrderMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "totalAmount", ignore = true)
-    @Mapping(target = "abacateTransactionId", ignore = true)
+    @Mapping(target = "upskillTransactionId", ignore = true)
     @Mapping(target = "paymentLink", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
@@ -54,8 +54,9 @@ public interface OrderMapper {
         return "/public/orders/" + orderId + "/status";
     }
 
-    @Named("getStatusDescription")
+     @Named("getStatusDescription")
     default String getStatusDescription(com.clecio.orderhub.entity.OrderStatus status) {
         return status != null ? status.getDescription() : null;
     }
 }
+
